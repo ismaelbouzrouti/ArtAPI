@@ -11,15 +11,20 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false,unique = true)
     private String name;
 
+    @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @Column(nullable = false)
     private int quantity;
 
+    @Column(nullable = false)
     private BigDecimal pricePerDay;
 
     public Product() {

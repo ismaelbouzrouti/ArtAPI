@@ -1,13 +1,13 @@
 package org.enterpriseapp.artapi.products;
 
+import org.enterpriseapp.artapi.Imapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class ProductService {
+public class ProductService implements Imapper<Product,ProductDTO> {
 
     @Autowired
     private ProductRepository repository;
@@ -100,21 +100,22 @@ public class ProductService {
 
     //enkel DTO's worden teruggestuurd naar de client
 
-    public ProductDTO convertToDTO(Product product) {
+    @Override
+    public ProductDTO convertToDTO(Product entity) {
 
         ProductDTO dto = new ProductDTO();
-        dto.setId(product.getId());
-        dto.setName(product.getName());
-        dto.setDescription(product.getDescription());
-        dto.setPricePerDay(product.getPricePerDay());
-        dto.setQuantity(product.getQuantity());
-        dto.setCategory(product.getCategory());
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setDescription(entity.getDescription());
+        dto.setPricePerDay(entity.getPricePerDay());
+        dto.setQuantity(entity.getQuantity());
+        dto.setCategory(entity.getCategory());
         return dto;
     }
 
     //enkel entities worden opgeslaan in de db
-
-    private Product convertToEntity(ProductDTO dto) {
+    @Override
+    public Product convertToEntity(ProductDTO dto) {
         Product product = new Product();
         product.setId(dto.getId());
         product.setName(dto.getName());
@@ -124,5 +125,7 @@ public class ProductService {
         product.setPricePerDay(dto.getPricePerDay());
         return product;
     }
+
+
 
 }
