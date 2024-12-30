@@ -1,6 +1,8 @@
 package org.enterpriseapp.artapi.users;
 
 import org.enterpriseapp.artapi.Imapper;
+import org.enterpriseapp.artapi.exceptions.EmailAlreadyExistsException;
+import org.enterpriseapp.artapi.exceptions.UserNameAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +14,19 @@ public class UserService implements Imapper<User,UserDTO> {
 
     public void saveUser(User user){
 
-        try{
+        if(repository.existsByEmail(user.getEmail())){
+            throw new EmailAlreadyExistsException("A user with this email already exists");
+
+        } else if (repository.existsByUserName(user.getUserName())) {
+
+            throw new UserNameAlreadyExistsException("A user with this username already exists");
+        }
+
+       else try{
             repository.save(user);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     public void updateUser(User user){

@@ -11,10 +11,11 @@ class UserService{
     try {
         const response = await axios.post(`${BASE_URL}signup`,user);
 
-        return response.status;
+        return response;
         
     } catch (error) {
-        console.error("User could not be registered", error);
+
+       console.error(error);
     }
 
  }

@@ -39,22 +39,25 @@ const RegistrationPage: React.FC = () => {
 
     console.log(formData);
     
+    
 
-   const status =  await UserService.registerUser(formData);
+        const response =  await UserService.registerUser(formData);
 
-      if (status == 200) {
-        setSuccessMessage("Registration successful! You can now log in.");
-        setFormData({
-          userName: "",
-          email: "",
-          password: "",
-          firstName: "",
-          lastName: "",
-        });
-        setConfirmPassword("");
-      } else {
-        setError("Failed to register. Please try again.");
-      }
+        if (response?.status === 200) {
+          setSuccessMessage("Registration successful! You can now log in.");
+          setFormData({
+            userName: "",
+            email: "",
+            password: "",
+            firstName: "",
+            lastName: "",
+          });
+          setConfirmPassword("");
+          setError(null);
+        } else {
+            setError(response?.data || "Registration failed. Please try again.");
+          }
+     
   };
 
   return (
