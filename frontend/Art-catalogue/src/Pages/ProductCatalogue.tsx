@@ -3,15 +3,23 @@ import ProductService from "../Services/ProductService";
 import IProduct from "../Types/Product";
 import ProductFilter from "../components/ProductFilter";
 import ProductList from "../components/ProductList";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 import Navbar from "@/components/Navbar";
+
+import TokenService from "@/Services/TokenService";
+
 
 const ProductCatalogue: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [categories] = useState<string[]>(["CABLE", "LIGHTING", "PANELS"]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  if(localStorage.getItem('token') === null || TokenService.isTokenExpired() == true){
+
+  return <Navigate to='/login'  />
+
+}
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,7 +28,7 @@ const ProductCatalogue: React.FC = () => {
         if (!selectedCategory) {
           fetchedProducts = await ProductService.getProducts();
         } else {
-          fetchedProducts = await ProductService.getProdyctsByCategory(
+          fetchedProducts = await ProductService.getProductsByCategory(
             selectedCategory
           );
         }
@@ -60,16 +68,6 @@ const ProductCatalogue: React.FC = () => {
       />
       {/* Product List */}
       <ProductList products={products} />
-
-      <footer className="mt-8 flex justify-center">
-        <Link to="/create-product">
-          <Button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-lg font-semibold shadow-lg rounded-lg"
-          >
-            Create Product
-          </Button>
-        </Link>
-      </footer>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 package org.enterpriseapp.artapi.products;
 
-import org.enterpriseapp.artapi.Imapper;
+import org.enterpriseapp.artapi.mapper.Imapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

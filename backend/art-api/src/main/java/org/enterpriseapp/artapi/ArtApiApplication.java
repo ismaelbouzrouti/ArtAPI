@@ -6,8 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ArtApiApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ArtApiApplication.class, args);
-    }
+    public static void main(String[] args) {SpringApplication.run(ArtApiApplication.class, args);}
 
 }

@@ -6,6 +6,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from "@/components/ui/button";
 import EditButton from "@/components/EditButton";
 import Navbar from "@/components/Navbar";
+import { Navigate } from "react-router-dom";
+import TokenService from "@/Services/TokenService";
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -13,6 +15,15 @@ const ProductDetails: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const [message, setMessage] = useState<{type: "success" | "error"; text: string} | null>(null);
+  
+
+  if(localStorage.getItem('token') === null || TokenService.isTokenExpired() == true){
+
+    return <Navigate to='/login'  />
+  
+  }
+
+  const isAdmin = TokenService.isAdmin();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -33,7 +44,7 @@ const ProductDetails: React.FC = () => {
 
       if(await ProductService.deleteProduct(product.id) == 200) {
         setMessage({type:"success",text: "Product was deleted successfully"});
-        setTimeout(() => navigate("/products"),2000);
+        setTimeout(() => navigate("/"),2000);
         
         }else setMessage({type:"error",text:"Product could not be deleted"});      
         
@@ -71,15 +82,22 @@ const ProductDetails: React.FC = () => {
         </CardContent>
         <CardFooter>
         <div className="mt-4 flex space-x-2">
+
+          {isAdmin &&(
         <EditButton productId={product.id!} />
+          )}
+
         <Button className="text-sm">
-          Rent Now
+          Add to cart
         </Button>
+        
+        {isAdmin && ( 
         <Button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-        onClick={handleDelete}
-        >
+        onClick={handleDelete}>
           Delete product
-        </Button>
+        </Button> )}
+
+
       </div>
         </CardFooter>
       </Card>

@@ -9,8 +9,8 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select"
+import { Navigate } from "react-router-dom";
 
 
 interface ProductFormProps {
@@ -32,6 +32,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isEdit = false, initialProduc
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [redirect, setRedirect] = useState<boolean>(false);
 
   useEffect(() => {
     if (isEdit && initialProduct) {
@@ -54,14 +55,21 @@ const ProductForm: React.FC<ProductFormProps> = ({ isEdit = false, initialProduc
     setSuccessMessage(null);
 
     // Validate quantity and pricePerDay
-  if (isNaN(formData.quantity) || formData.quantity == 0) {
-    setError("Quantity must be a positive integer and bigger than 0.");
+  if (isNaN(formData.quantity) || formData.quantity < 1 || formData.quantity > 1000) {
+    setError("Quantity must be a positive integer and bigger than 0 and smaller than 1000.");
     setIsSubmitting(false);
     return;
   }
 
-  if (isNaN(formData.pricePerDay) || formData.pricePerDay == 0) {
-    setError("Price per Day must be a positive number with up to two decimal places and bigger than 0.");
+  // Price per day validation: must be a positive number, at least 0.01, with up to two decimal places
+  const pricePerDayRegex = /^\d+(\.\d{1,2})?$/; // Matches positive numbers with up to 2 decimal places
+
+  if (isNaN(formData.pricePerDay) || formData.pricePerDay <= 0) {
+    setError("Price per Day must atleast be 0.01.");
+    setIsSubmitting(false);
+    return;
+  }else if (!pricePerDayRegex.test(formData.pricePerDay.toString())){
+    setError("Price per day must be a valid monetary value with up to two decimal places.");
     setIsSubmitting(false);
     return;
   }
@@ -72,18 +80,53 @@ const ProductForm: React.FC<ProductFormProps> = ({ isEdit = false, initialProduc
     return;
   }
 
+   // Name validation
+   if (!formData.name.trim()) {
+    setError("Name must not be blank.");
+    setIsSubmitting(false);
+    return;
+  } else if (formData.name.length < 3 || formData.name.length > 50) {
+    setError("Name must be at least 3 characters and maximum 50 characters.");
+    setIsSubmitting(false);
+    return;
+  }
+
+  // Description validation
+  if (!formData.description.trim()) {
+    setError("Description must not be blank.");
+    setIsSubmitting(false);
+    return;
+  } else if (formData.description.length < 10 || formData.description.length > 500) {
+    setError("Description must be at least 10 characters and maximum 500 characters.");
+    setIsSubmitting(false);
+    return;
+  }
+
 
 
 
 
     try {
       if (isEdit && initialProduct?.id) {
-        if(await ProductService.editProduct(initialProduct.id, formData) == 200)setSuccessMessage("Product updated successfully!");
+        if(await ProductService.editProduct(initialProduct.id, formData) == 200){
+          
+          setSuccessMessage("Product updated successfully!");
+          setTimeout(() => {
+            setRedirect(true);
+          }, 2000);
+        
+        }
         else setError("product could not be edited");
 
         
       } else {
-        if( await ProductService.createProduct(formData) == 200)setSuccessMessage("Product created successfully!");
+        if( await ProductService.createProduct(formData) == 200){
+          
+          setSuccessMessage("Product created successfully!");
+          setTimeout(() => {
+            setRedirect(true);
+          }, 2000);
+        }
         else setError("product could not be created");
         setFormData({
           name: "",
@@ -95,10 +138,16 @@ const ProductForm: React.FC<ProductFormProps> = ({ isEdit = false, initialProduc
       }
     } catch (err) {
       setError("Failed to submit the form. Please try again.");
+      console.error(err);
     } finally {
       setIsSubmitting(false);
     }
   };
+
+
+  if (redirect) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className="container mx-auto max-w-md mt-8">
@@ -132,6 +181,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isEdit = false, initialProduc
             id="description"
             name="description"
             value={formData.description}
+            required
             onChange={handleChange}
             placeholder="Product Description"
           />

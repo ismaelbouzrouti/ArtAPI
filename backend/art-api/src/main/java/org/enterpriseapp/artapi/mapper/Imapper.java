@@ -1,4 +1,4 @@
-package org.enterpriseapp.artapi;
+package org.enterpriseapp.artapi.mapper;
 
 public interface Imapper<E,D> {
 

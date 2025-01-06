@@ -1,17 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-
+import TokenService from "@/Services/TokenService";
+import { useNavigate } from "react-router-dom";
 const Navbar: React.FC = () => {
-  //const [userRole, setUserRole] = useState<string | null>(null); // Placeholder for role, replace with actual logic
+  
+  const isAdmin = TokenService.isAdmin();
+  const navigate = useNavigate();
+
+  const handleLogout = (): void => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
 
   return (
     <nav className="bg-white shadow-md border-b border-gray-200">
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
         {/* Logo */}
         <div className="text-2xl font-bold text-blue-600">
-          <Link to="/">MyProject</Link>
+          <Link to="/">ART</Link>
         </div>
 
         {/* Navigation Links */}
@@ -26,8 +34,7 @@ const Navbar: React.FC = () => {
               My Reservations
             </Button>
           </Link>
-          {/* Conditional rendering for role-based access */}
-          {//userRole === "ADMIN" && 
+          {isAdmin && 
           (
             <Link to="/create-product">
               <Button variant="outline" className="hover:bg-blue-600 hover:text-white">
@@ -39,7 +46,7 @@ const Navbar: React.FC = () => {
 
         {/* Profile/Logout */}
         <div>
-          <Button variant="ghost" className="hover:text-red-500">
+          <Button variant="ghost" className="hover:text-red-500" onClick={handleLogout}>
             Logout
           </Button>
         </div>

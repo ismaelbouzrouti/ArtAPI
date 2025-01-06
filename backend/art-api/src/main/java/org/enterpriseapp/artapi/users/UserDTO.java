@@ -1,17 +1,37 @@
 package org.enterpriseapp.artapi.users;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 // User DTO
 public class UserDTO {
 
 
         private Long id;
-        private String userName;
-        private String email;
-        private String password;
-        private String firstName;
-        private String lastName;
+    @NotBlank(message = "Username must not be blank")
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+    private String userName;
 
-        // Constructors
+    @Email(message = "Invalid email")
+    @NotBlank(message = "Email must not be blank")
+    private String email;
+
+    @NotBlank(message = "Password must not be blank")
+    @Size(min = 8, max = 50, message = "Password must be between 8 and 50 characters")
+    private String password;
+
+    @NotNull(message = "First name can't be null")
+    @Size(min = 2, max = 30, message = "First name must be between 2 and 30 characters")
+    private String firstName;
+
+    @NotNull(message = "Last name can't be null")
+    @Size(min = 2, max = 30, message = "Last name must be between 2 and 30 characters")
+    private String lastName;
+
+
+    // Constructors
 
         public UserDTO() {}
 

@@ -12,7 +12,6 @@ function App() {
     <div className="container">
       <Routes>
         <Route path="/" element={<ProductCatalogue />} />
-        <Route path="/products" element={<ProductCatalogue />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/edit-product/:id" element={<EditProduct />} />
         <Route path="/create-product" element={<CreateProduct />} />

@@ -1,13 +1,29 @@
 package org.enterpriseapp.artapi.products;
 
+import jakarta.validation.constraints.*;
+
 import java.math.BigDecimal;
 
 public class ProductDTO {
     private Long id;
+    @NotBlank(message = "Name must not be blank")
+    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     private String name;
+
+    @NotBlank(message = "Description must not be blank")
+    @Size(min = 10, max = 500, message = "Description must be between 10 and 500 characters")
     private String description;
+
+    @NotNull(message = "Category must not be null")
     private Category category;
+
+    @Min(value = 1, message = "Quantity must be at least 1")
+    @Max(value = 1000, message = "Quantity must not exceed 1000")
     private int quantity;
+
+    @NotNull(message = "Price per day must not be null")
+    @DecimalMin(value = "0.01", message = "Price per day must be at least 0.01")
+    @Digits(integer = 10, fraction = 2, message = "Price per day must be a valid monetary value with up to two decimal places")
     private BigDecimal pricePerDay;
 
     public ProductDTO() {
