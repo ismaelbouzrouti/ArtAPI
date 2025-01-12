@@ -21,7 +21,7 @@ class ShoppingCartService{
                         "Content-Type": "application/json",
                 },
             });
-            console.log(response.data);
+        
             
             return response.data;
             
@@ -44,16 +44,12 @@ class ShoppingCartService{
                 }
             });
             
-            console.log(`${BASE_URL}shoppingCart/${userId}/addItem`);
-            console.log(item);
             
             
             return response.status;
             
         } catch (error) {
-            console.error("could not add item to shoppingCart: ", error);
-            console.log(`${BASE_URL}shoppingCart/${userId}/addItem`);
-            console.log(item);
+            console.error("could not add item to shoppingCart: ", error)
         }
 
     }

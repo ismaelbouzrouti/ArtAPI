@@ -24,8 +24,6 @@ class AuthService{
  async loginUser(loginData: ILoginData){
 
     try{
-
-        console.log(loginData);
         
 
         const response = await axios.post(`${BASE_URL}login`,loginData);

@@ -49,7 +49,6 @@ const LoginPage: React.FC = () => {
 
       if (token) {
         localStorage.setItem("token", token);
-        console.log("Login successful:", token);
         setSuccessMessage(`Login successful, Welcome ${formData.username}!`);
 
         // Delay redirection for showing the success message

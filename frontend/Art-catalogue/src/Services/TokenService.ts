@@ -71,24 +71,13 @@ class TokenService {
     static isTokenExpired():boolean{
 
         const decodedToken = this.decodeToken();
-
-        console.log("exp: " + decodedToken.exp);
         
 
         if(!decodedToken || decodedToken.exp === null || decodedToken.exp * 1000 < Date.now()){
-
-            console.log("decoded token:" + decodedToken);
-
-            console.log("expiration: " + decodedToken.exp * 1000);
-
-            console.log("date now: " + Date.now());
-            
-            
             
             return true
 
         }else {
-            console.log("yesssiiiir");
 
             
             return false;
