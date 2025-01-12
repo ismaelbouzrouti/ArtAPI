@@ -73,9 +73,6 @@ public class SecurityConfig{
                                 .requestMatchers("/signup").permitAll()
                                 // Allows anyone to access the `/signup` endpoint.
 
-                                .requestMatchers("/admin").hasRole("admin")
-                                // Restricts `/admin` access to users with the "admin" role.
-
                                 .anyRequest().authenticated()
                         // Requires authentication for any other requests.
                 )
@@ -99,8 +96,6 @@ public class SecurityConfig{
     @Bean
         // Declares a bean for the `AuthenticationManager`, which manages authentication processes.
     AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        System.out.println("inside authentication manager");
-        // Debug log to indicate when the authentication manager is initialized.
 
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
@@ -156,21 +151,34 @@ public class SecurityConfig{
     JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(jwtKey.getBytes()));
         // Configures and returns a JWT encoder with the secret key.
+        // Creates a `JwtEncoder` using Nimbus, which is configured with a secret key.
+        // `jwtKey.getBytes()` converts the secret key (e.g., a string) into a byte array.
+        // The `ImmutableSecret` is used to wrap the byte array and make it immutable,
+        // ensuring it is securely passed to the encoder.
     }
 
     @Bean
     // Declares a bean for JWT decoding.
     public JwtDecoder jwtDecoder() {
         byte[] bytes = jwtKey.getBytes();
-        // Converts the secret key to a byte array.
+        // Converts the secret key (`jwtKey`) from a String into a byte array.
+        // This format is necessary for cryptographic operations.
 
         SecretKeySpec originalKey = new SecretKeySpec(bytes, 0, bytes.length, "RSA");
         // Creates a `SecretKeySpec` for cryptographic operations.
+//        The SecretKeySpec creates a cryptographic key from a byte array.
+//        "RSA" is just a label and doesn’t affect the functionality.
+//        The real algorithm HS256 is configured explicitly in NimbusJwtDecoder.
+//        the "RSA" label is like a leftover convention or placeholder that has no meaningful impact on the process in this specific context.
 
         return NimbusJwtDecoder.withSecretKey(originalKey)
                 .macAlgorithm(MacAlgorithm.HS256)
                 .build();
-        // Configures and returns a JWT decoder with the HS256 algorithm.
+        // Configures and builds a `JwtDecoder`:
+        //   - `withSecretKey(originalKey)`: Specifies the secret key for decoding JWT tokens.
+        //   - `macAlgorithm(MacAlgorithm.HS256)`: Configures the decoder to validate JWT signatures
+        //     using the HS256 (HMAC with SHA-256) algorithm.
+        //   - `.build()`: Constructs and returns the fully-configured `JwtDecoder`.
     }
 }
 

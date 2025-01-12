@@ -1,5 +1,6 @@
 package org.enterpriseapp.artapi.users;
 import jakarta.persistence.*;
+import org.enterpriseapp.artapi.reservation.Reservation;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +15,7 @@ import java.util.List;
     public class User implements UserDetails {
 
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @GeneratedValue(strategy = GenerationType.IDENTITY) //auto increment id
         private Long id;
 
         @Column(nullable = false, unique = true)
@@ -36,7 +37,13 @@ import java.util.List;
         @Column(nullable = false)
         private boolean isAdmin;
 
-        //constructors
+        //a user can have many reservations
+        // the reservation holds the foreign key = user_id
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) //if a user is deleted his reservations are also deleted
+        private List<Reservation> reservations;
+
+
+    //constructors
 
         public User(String userName, Long id, String password, String email, String firstName, String lastName) {
             this.userName = userName;
@@ -69,6 +76,12 @@ import java.util.List;
             this.userName = username;
         }
 
+//    assigns roles to the user based on their admin status
+//    returns "ROLE_ADMIN" if the user is an admin, else "ROLE_USER"
+//    this is used by Spring Security for role-based access control
+//    it returns the roles and authorities of the user based on the field isAdmin
+//    when user logs in its details are fetched from the db and put into a authentication context
+//    this way spring can check if user is admin or not
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (isAdmin) {

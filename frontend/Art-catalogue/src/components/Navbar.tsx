@@ -29,17 +29,26 @@ const Navbar: React.FC = () => {
               Home
             </Button>
           </Link>
-          <Link to="/my-reservations">
+          <Link to="/reservations">
             <Button variant="ghost" className="hover:text-blue-600">
-              My Reservations
+              Reservations
             </Button>
           </Link>
           {isAdmin && 
           (
             <Link to="/create-product">
-              <Button variant="outline" className="hover:bg-blue-600 hover:text-white">
+              <Button variant="ghost" className="hover:text-blue-600">
                 Create Product
               </Button>
+            </Link>
+          )}
+
+        {!isAdmin && 
+          (
+            <Link to="/shopping-cart">
+            <Button variant="ghost" className="hover:text-blue-600">
+              My shopping cart
+            </Button>
             </Link>
           )}
         </div>

@@ -6,6 +6,9 @@ import CreateProduct from './Pages/CreateProduct';
 import './App.css';
 import LoginPage from './Pages/LoginPage';
 import RegistrationPage from './Pages/RegistrationPage';
+import MyShoppingCart from './Pages/MyShoppingCart';
+import ReservationsPage from './Pages/ReservationsPages';
+import ThankYouPage from './Pages/ThankYouPage';
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
         <Route path="/create-product" element={<CreateProduct />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/shopping-cart" element={<MyShoppingCart />} />
+        <Route path="/reservations" element={<ReservationsPage />} />
+        <Route path="/thank-you" element={<ThankYouPage />} />
       </Routes>
     </div>
   );

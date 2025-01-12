@@ -20,13 +20,21 @@ public class CartItemService implements Imapper<CartItem, CartItemDTO> {
         CartItem cartItem = new CartItem();
 
         cartItem.setId(dto.getId());
-        cartItem.setShoppingCart(shoppingCartRepository.getShoppingCartByUserId(dto.getUserId()));
         cartItem.setPrice(dto.getPrice());
         cartItem.setQuantity(dto.getQuantity());
         cartItem.setProduct(productRepository.getReferenceById(dto.getProductId()));
 
+
         return cartItem;
 
+    }
+
+    public void incrementItemQuantity(CartItem item){
+        item.setQuantity(item.getQuantity() + 1);
+    }
+
+    public void decrementItemQuantity(CartItem item){
+        item.setQuantity(item.getQuantity() - 1);
     }
 
     @Override
@@ -38,6 +46,9 @@ public class CartItemService implements Imapper<CartItem, CartItemDTO> {
         dto.setProductId(entity.getProduct().getId());
         dto.setPrice(entity.getPrice());
         dto.setQuantity(entity.getQuantity());
+        dto.setName(entity.getProduct().getName());
+        dto.setCategory(entity.getProduct().getCategory().toString());
+
 
         return dto;
     }

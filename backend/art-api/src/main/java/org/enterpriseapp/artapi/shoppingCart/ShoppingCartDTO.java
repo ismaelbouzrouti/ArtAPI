@@ -2,6 +2,7 @@ package org.enterpriseapp.artapi.shoppingCart;
 
 import org.enterpriseapp.artapi.users.User;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class ShoppingCartDTO {
@@ -16,6 +17,16 @@ public class ShoppingCartDTO {
 
    private double TotalPrice;
 
+    private String returnDate;
+
+
+    public String getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(String returnDate) {
+        this.returnDate = returnDate;
+    }
 
     public Long getId() {
         return id;

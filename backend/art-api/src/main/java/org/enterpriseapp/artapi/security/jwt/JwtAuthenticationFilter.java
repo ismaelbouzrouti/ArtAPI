@@ -27,7 +27,6 @@ import java.util.Collection;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
-    // A reference to the `TokenService` to handle JWT operations.
 
     // Constructor-based dependency injection of the `TokenService`.
     public JwtAuthenticationFilter(TokenService tokenService) {
@@ -47,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = getAuthentication(token);
 
             System.out.println("principal: " + authentication.getPrincipal());
-            // Debug statement to log the principal (username) extracted from the token.
+
 
             // Step 4: Set the authentication in the `SecurityContext`.
             SecurityContextHolder.getContext().setAuthentication(authentication);

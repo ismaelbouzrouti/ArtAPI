@@ -8,6 +8,8 @@ import EditButton from "@/components/EditButton";
 import Navbar from "@/components/Navbar";
 import { Navigate } from "react-router-dom";
 import TokenService from "@/Services/TokenService";
+import ICartItem from "@/Types/CartItem";
+import ShoppingCartService from "@/Services/ShoppingCartService";
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -53,6 +55,35 @@ const ProductDetails: React.FC = () => {
 
   }
 
+
+  const handleAddItem = async () =>{
+
+    if(product && product.id != null){
+
+      const cartItem: ICartItem = {
+
+        productId: product.id,
+        quantity: 1,
+        price: product.pricePerDay
+
+      };
+
+      try {
+        const status = await ShoppingCartService.addItem(cartItem);
+        if (status === 200) {
+          setMessage({ type: "success", text: "Item added to cart successfully!" });
+          setTimeout(() => navigate("/shopping-cart"),2000);
+        } else {
+          setMessage({ type: "error", text: "Failed to add item to cart." });
+        }
+      } catch (error) {
+        setMessage({ type: "error", text: "An error occurred while adding the item to the cart." });
+        console.error(error);
+      }
+    }
+  };
+
+
   if (error) {
     return <p className="text-red-500">{error}</p>;
   }
@@ -87,7 +118,8 @@ const ProductDetails: React.FC = () => {
         <EditButton productId={product.id!} />
           )}
 
-        <Button className="text-sm">
+        <Button className="text-sm"
+        onClick={handleAddItem}>
           Add to cart
         </Button>
         

@@ -57,13 +57,13 @@ class TokenService {
 
         const decodedToken = this.decodeToken();
 
-        if(!decodedToken || decodedToken.subject === undefined){
+        if(!decodedToken || decodedToken.sub === null){
 
             throw new Error("'subject' claim is not present in the token.");
 
         }
 
-        return decodedToken.subject;
+        return decodedToken.sub!;
 
 
     }

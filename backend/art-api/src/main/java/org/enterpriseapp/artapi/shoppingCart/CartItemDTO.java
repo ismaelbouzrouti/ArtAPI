@@ -8,18 +8,28 @@ public class CartItemDTO {
 
    private Long productId;
 
-   private Long userId;
-
    private double price;
 
    private int quantity;
 
-    public Long getUserId() {
-        return userId;
+   private String name;
+
+   private String category;
+
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public Long getId() {

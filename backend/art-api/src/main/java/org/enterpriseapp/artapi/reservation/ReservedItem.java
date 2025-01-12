@@ -1,21 +1,17 @@
-package org.enterpriseapp.artapi.shoppingCart;
+package org.enterpriseapp.artapi.reservation;
 
 import jakarta.persistence.*;
 import org.enterpriseapp.artapi.products.Product;
 
 @Entity
-public class CartItem {
+public class ReservedItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //cart item can only belong to one shopping cart, a shopping cart can have many items
     @ManyToOne
-    @JoinColumn(name = "shoppingCart_id", nullable = false)
-    ShoppingCart shoppingCart;
-
-    //cart item holds foreign keys product_id & shoppingCart_id
-    //same with product
+    @JoinColumn(name = "reservation_id", nullable = false)
+    Reservation reservation;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -33,12 +29,12 @@ public class CartItem {
         return id;
     }
 
-    public ShoppingCart getShoppingCart() {
-        return shoppingCart;
+    public Reservation getReservation() {
+        return reservation;
     }
 
-    public void setShoppingCart(ShoppingCart shoppingCart) {
-        this.shoppingCart = shoppingCart;
+    public void setReservation(Reservation shoppingCart) {
+        this.reservation = shoppingCart;
     }
 
     public Product getProduct() {

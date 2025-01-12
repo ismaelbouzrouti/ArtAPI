@@ -25,22 +25,6 @@ public class UserService implements Imapper<User,UserDTO> {
 
     }
 
-    public void updateUser(User user){
-
-        if(user != null && repository.existsById(user.getId())){
-
-            repository.save(user);
-        }
-    }
-
-    public void deleteUser(Long id){
-
-        if(id != null && repository.existsById((id))){
-
-            repository.deleteById(id);
-        }
-    }
-
 
 
     @Override
@@ -49,7 +33,7 @@ public class UserService implements Imapper<User,UserDTO> {
         return new User(
                 dto.getUserName(),
                 dto.getId(),
-                passwordEncoder.encode( dto.getPassword()),
+                passwordEncoder.encode( dto.getPassword()), //hashing the password with bcrypt so the password is not actually saved
                 dto.getEmail(),
                 dto.getFirstName(),
                 dto.getLastName()

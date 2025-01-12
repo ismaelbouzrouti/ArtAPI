@@ -43,9 +43,6 @@ public class TokenService {
         User user = (User) authentication.getPrincipal();
         // Retrieves the authenticated user from the `Authentication` object.
 
-        System.out.println(user);
-        // Debugging statement to print user details.
-
         // Retrieves roles/authorities assigned to the user.
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
@@ -60,9 +57,6 @@ public class TokenService {
                         .map(GrantedAuthority::getAuthority) // Extracts role names.
                         .toList())
                 .build();
-
-        System.out.println(claims.getSubject());
-        // Debugging statement to print the subject of the claims.
 
         // Prepares parameters for the JWT encoder with HMAC SHA-256 signing.
         var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
@@ -85,7 +79,7 @@ public class TokenService {
         }
     }
 
-    // Extracts the username (or user ID) from the JWT token.
+    // Extracts the username from the JWT token.
     public String extractUsernameFromToken(String token) {
         Jwt jwt = decoder.decode(token);
         // Decodes the token.
