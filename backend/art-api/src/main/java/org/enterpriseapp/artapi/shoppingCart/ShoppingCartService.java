@@ -54,8 +54,14 @@ public class ShoppingCartService implements Imapper<ShoppingCart, ShoppingCartDT
                 }
                 return convertToDTO(shoppingCart);
             }else {
+                ShoppingCart shoppingCart = shoppingCartRepository.getShoppingCartByUserId(userId);
 
-                return convertToDTO(shoppingCartRepository.getShoppingCartByUserId(userId));
+                //make sure the chosen date stays when there are items in the cart
+                //if not put the date back to default 7 days
+                if(shoppingCart.getCartItems().isEmpty()){
+                    shoppingCart.setReturnDate(setDefaultShoppingCartReturnDate());
+                }
+                return convertToDTO(shoppingCart);
             }
 
         } catch (Exception e) {
